@@ -28,20 +28,29 @@ def process_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         df[new_col_name] = -np.log10(df[col].replace(0, 1e-300))
         new_cols.append(new_col_name)
 
-    # 2. Define suffixes to remove
-    suffixes_to_remove = ["_CI.L", "_CI.R", "_p.adj", "_p.val"]
+    # 2. Define suffixes and patterns to filter
+    # Protein info: columns without '_vs_'
+    # Fold change: columns ending in '_diff'
+    # New p-values: already in new_cols
     
-    # 3. Filter columns
     cols_to_keep = []
     for col in df.columns:
-        # Check if it should be removed
-        should_remove = any(col.endswith(sfx) for sfx in suffixes_to_remove)
-        
-        # Exception: keep *_diff
-        if col.endswith("_diff"):
-            should_remove = False
+        # 1. Always keep the new p-value columns
+        if col in new_cols:
+            cols_to_keep.append(col)
+            continue
             
-        if not should_remove or col in new_cols:
+        # 2. Keep fold change columns
+        if col.endswith("_diff"):
+            cols_to_keep.append(col)
+            continue
+            
+        # 3. Handle remaining columns
+        # Exclude comparison columns (_vs_) and sample columns (starting with C_ or S_)
+        # Also exclude the 'significant' column
+        is_sample_or_comp = col.startswith(("C_", "S_")) or "_vs_" in col or col == "significant"
+        
+        if not is_sample_or_comp:
             cols_to_keep.append(col)
             
     return df[cols_to_keep]
