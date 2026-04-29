@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VolcaConvert | Premium CSV Processor</title>
+    <title>VolcaConvert | VolcaNoseR CSV Processor</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div class="blob"></div>
     <div class="container">
         <main class="glass-card">
             <header class="header">
                 <h1>VolcaConvert</h1>
-                <p>Cleanse and transform your proteomics data with precision. Drop your CSV or Excel file to begin.</p>
+                <p>Prepare your DIA-Analyst data for VolcaNoseR</p>
             </header>
 
             <div id="drop-zone" class="drop-zone">
                 <div class="icon-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
                 </div>
                 <p class="drop-text">Drag & drop files here</p>
@@ -36,14 +39,22 @@
                 </div>
                 <div id="result" style="display: none;">
                     <a id="download-link" class="download-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
                         Download Converted CSV
                     </a>
-                    <button onclick="resetUI()" style="margin-top: 1rem; background: transparent; border: none; color: var(--text-dim); cursor: pointer; text-decoration: underline;">Upload another</button>
+                    <button onclick="resetUI()"
+                        style="margin-top: 1rem; background: transparent; border: none; color: var(--text-dim); cursor: pointer; text-decoration: underline;">Upload
+                        another</button>
                 </div>
             </div>
         </main>
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>
