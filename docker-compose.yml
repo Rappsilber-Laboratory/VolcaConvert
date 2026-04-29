@@ -12,6 +12,6 @@ services:
     ports:
       - "8080:80"
     environment:
-      - BACKEND_PORT=8001
+      - API_URL=http://localhost:8001
     depends_on:
       - backend

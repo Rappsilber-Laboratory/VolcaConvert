@@ -7,7 +7,7 @@ const downloadLink = document.getElementById('download-link');
 
 // Base URL for API - in docker this will be the backend service
 // For local development it might be localhost:8000
-const API_URL = '/api'; // Using a proxy in Nginx or relative path
+const API_URL = '${API_URL}';
 
 dropZone.addEventListener('click', () => fileInput.click());
 
