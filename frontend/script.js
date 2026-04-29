@@ -1,0 +1,91 @@
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const statusArea = document.getElementById('status-area');
+const loading = document.getElementById('loading');
+const result = document.getElementById('result');
+const downloadLink = document.getElementById('download-link');
+
+// Base URL for API - in docker this will be the backend service
+// For local development it might be localhost:8000
+const API_URL = '/api'; // Using a proxy in Nginx or relative path
+
+dropZone.addEventListener('click', () => fileInput.click());
+
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('drag-over');
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        handleUpload(files[0]);
+    }
+});
+
+fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        handleUpload(e.target.files[0]);
+    }
+});
+
+async function handleUpload(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Update UI
+    dropZone.style.display = 'none';
+    statusArea.style.display = 'block';
+    loading.style.display = 'flex';
+    result.style.display = 'none';
+
+    try {
+        const response = await fetch(`${API_URL}/convert`, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            let errorMessage = 'Failed to convert file';
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const err = await response.json();
+                errorMessage = err.detail || errorMessage;
+            } else {
+                const text = await response.text();
+                // Extract title or body from HTML if possible
+                const match = text.match(/<title>(.*?)<\/title>/i) || text.match(/<h1>(.*?)<\/h1>/i);
+                if (match) {
+                    errorMessage = match[1];
+                }
+            }
+            throw new Error(errorMessage);
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        
+        downloadLink.href = url;
+        downloadLink.download = `converted_${file.name.split('.')[0]}.csv`;
+        
+        loading.style.display = 'none';
+        result.style.display = 'block';
+
+    } catch (error) {
+        console.error(error);
+        alert(`Error: ${error.message}`);
+        resetUI();
+    }
+}
+
+function resetUI() {
+    dropZone.style.display = 'block';
+    statusArea.style.display = 'none';
+    fileInput.value = '';
+}
